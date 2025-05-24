@@ -4,7 +4,6 @@ import TextArea from "antd/es/input/TextArea";
 import dayjs from 'dayjs';
 import ExcelJS from 'exceljs';
 
-
 import {
     deliveryAddressOptions, legalCompanyOptions,
     loadingAddressOptions, ownershipTypeOptions,
@@ -56,15 +55,12 @@ export const LogisticForm = () => {
     }, [form])
 
     const handleFinish = async (values: FormValues) => {
-        // 1) Загрузим в память шаблон
-        const arrayBuffer = await fetch('/template.xlsx').then(r => r.arrayBuffer())
+        const arrayBuffer = await fetch('/logistic-project/template.xlsx').then(r => r.arrayBuffer())
         const workbook = new ExcelJS.Workbook()
         await workbook.xlsx.load(arrayBuffer)
 
-        // 2) Работать будем с первым листом
         const sheet = workbook.worksheets[0]
 
-        // 3) Заполним нужные ячейки
         const deliveryDateOffset = Number(values.deliveryDate)
         const deliveryDateCalc = values.currentDate.add(deliveryDateOffset, 'day').format('DD.MM.YYYY')
 
@@ -96,15 +92,13 @@ export const LogisticForm = () => {
 
 
         for (const [addr, text] of Object.entries(cellMap)) {
-            const cell = sheet.getCell(addr);
-            cell.value = text;
-            cell.numFmt = '@';    // формат «текст», чтобы точно сохранить строку
+            const cell = sheet.getCell(addr)
+            cell.value = text
+            cell.numFmt = '@'
         }
 
-        // 4) Запишем книгу обратно в бинарный буфер
         const buffer = await workbook.xlsx.writeBuffer();
 
-        // 5) И скачиваем
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Заполненная_накладная.xlsx');
     }
 
