@@ -55,7 +55,11 @@ export const LogisticForm = () => {
     }, [form])
 
     const handleFinish = async (values: FormValues) => {
-        const arrayBuffer = await fetch('/logistic-project/template.xlsx').then(r => r.arrayBuffer())
+        const arrayBuffer = await fetch('template.xlsx')
+            .then(r => {
+                if (!r.ok) throw new Error(`HTTP ${r.status}`)
+                return r.arrayBuffer()
+            });
         const workbook = new ExcelJS.Workbook()
         await workbook.xlsx.load(arrayBuffer)
 
@@ -67,11 +71,27 @@ export const LogisticForm = () => {
         const cellMap: Record<string, string> = {
             B42: values.transportCompany,
             AD42: `${values.driverFullName}, ${values.driverData}`,
+
             D8: values.currentDate.format('DD.MM.YYYY'),
-            R8: `${values.currentDate.format('YYYY.MM.DD')}-${values.waybillNumber}`,
+            AF8: values.currentDate.format('DD.MM.YYYY'),
+            AB58: values.currentDate.format('DD.MM.YYYY'),
+            AB60: values.currentDate.format('DD.MM.YYYY'),
+            B60: values.currentDate.format('DD.MM.YYYY'),
+
+            R8: `${values.currentDate.format('DD.MM.YYYY')}-${values.waybillNumber}`,
+            AT8: `${values.currentDate.format('DD.MM.YYYY')}-${values.waybillNumber}`,
+
             B37: `Дата и время доставки - ${deliveryDateCalc}`,
+            AB76: `Дата и время доставки - ${deliveryDateCalc}`,
+
             B12: values.companyLegalAddress,
+            B17: values.companyLegalAddress,
+            B54: values.companyLegalAddress,
+            B56: values.companyLegalAddress,
+
             B19: values.deliveryAddress,
+            B76: values.deliveryAddress,
+
             B22: values.cargoDescriptionsFirst,
             B23: values.cargoDescriptionsSecond,
             AC22: values.cargoDescriptionsFirst ? `${values.quantityFirst} ${values.cargoQuantityFirst}` : '',
@@ -81,14 +101,23 @@ export const LogisticForm = () => {
             B64: values.quantitySecond
                 ? `${values.quantityFirst} ${values.cargoQuantityFirst}, ${values.quantitySecond} ${values.cargoQuantitySecond}`
                 : `${values.quantityFirst} ${values.cargoQuantityFirst}`,
+            B80: values.quantitySecond
+                ? `${values.quantityFirst} ${values.cargoQuantityFirst}, ${values.quantitySecond} ${values.cargoQuantitySecond}`
+                : `${values.quantityFirst} ${values.cargoQuantityFirst}`,
+            AB80: values.quantitySecond
+                ? `${values.quantityFirst} ${values.cargoQuantityFirst}, ${values.quantitySecond} ${values.cargoQuantitySecond}`
+                : `${values.quantityFirst} ${values.cargoQuantityFirst}`,
+
             B45: values.transport,
             AD45: values.truckNumber.toUpperCase(),
             B58: values.loadingAddress,
             B66: `Пломба № ${values.truckSealNumber}`,
             B68: values.specialist,
             AS48: values.ownershipType,
+
             AB68: values.driverFullName,
-        };
+            AB84: values.driverFullName,
+        }
 
 
         for (const [addr, text] of Object.entries(cellMap)) {
