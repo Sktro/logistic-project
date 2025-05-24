@@ -1,0 +1,31 @@
+.itemForm {
+    margin-bottom: 5px;
+}
+
+.cargo {
+    display: flex;
+    gap: 10px
+}
+
+.formContainer {
+    min-width: 400px;
+}
+
+.textAria {
+    min-height: 90px !important;
+}
+
+.infoContainer {
+    display: flex;
+    gap: 10px
+}
+
+.dateContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.addressContainer {
+    display: flex;
+    justify-content: space-between;
+}
