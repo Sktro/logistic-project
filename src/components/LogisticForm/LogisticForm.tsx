@@ -59,7 +59,7 @@ export const LogisticForm = () => {
             .then(r => {
                 if (!r.ok) throw new Error(`HTTP ${r.status}`)
                 return r.arrayBuffer()
-            });
+            })
         const workbook = new ExcelJS.Workbook()
         await workbook.xlsx.load(arrayBuffer)
 
