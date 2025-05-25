@@ -29,3 +29,9 @@
     display: flex;
     justify-content: space-between;
 }
+
+.footerContainer {
+    display: flex;
+    margin-bottom: 10px;
+    justify-content: space-around;
+}
