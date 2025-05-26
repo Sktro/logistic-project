@@ -28,10 +28,40 @@
 .addressContainer {
     display: flex;
     justify-content: space-between;
+    gap: 5px;
 }
 
 .footerContainer {
     display: flex;
     margin-bottom: 10px;
     justify-content: space-around;
+}
+
+.companyLegalAddress {
+    display: none;
+}
+
+
+/*---------------------------------------------------*/
+
+.driverContainer {
+    display: flex;
+    gap: 10px;
+}
+
+.cargoContainer {
+    display: flex;
+    justify-content: space-around;
+}
+
+.shopContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
 }
