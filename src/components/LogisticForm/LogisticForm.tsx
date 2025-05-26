@@ -80,9 +80,6 @@ export const LogisticForm = () => {
             B23: String(values.cargoDescriptionsSecond),
             AC22: values.cargoDescriptionsFirst ? `${values.quantityFirst} ${values.cargoQuantityFirst}` : '',
             AC23: values.quantitySecond ? `${values.quantitySecond} ${values.cargoQuantitySecond}` : '',
-            B64: values.quantitySecond
-                ? `${values.quantityFirst} ${values.cargoQuantityFirst}, ${values.quantitySecond} ${values.cargoQuantitySecond}`
-                : `${values.quantityFirst} ${values.cargoQuantityFirst}`,
             B45: String(values.transport),
             AD45: String(values.truckNumber).toUpperCase(),
             B58: values.loadingAddress,
@@ -110,6 +107,8 @@ export const LogisticForm = () => {
         sheet.getCell('B17').value = {formula: 'B12'}
         sheet.getCell('B54').value = {formula: 'B12'}
         sheet.getCell('B56').value = {formula: 'B12'}
+
+        sheet.getCell('B64').value = {formula: 'ЕСЛИ(И(AC22<>"";AC23<>"");AC22 & ", " & AC23; AC22 & AC23)'}
 
         sheet.getCell('B76').value = {formula: 'B19'}
 
