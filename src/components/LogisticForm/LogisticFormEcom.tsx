@@ -11,7 +11,6 @@ import {useEffect, useState} from "react";
 import dayjs from "dayjs";
 import {EcomShopsForm} from "./EcomOneShopsForm";
 import {EcomTwoShopsForm} from "./EcomTwoShopsForm";
-import type {ValuesConsignmentECOM} from "../../typesForm";
 
 type SegmentedType = 'ЕКОМ №1' | 'ЕКОМ №2'
 type submitType = 'invoice' | 'route'
@@ -57,7 +56,7 @@ export const LogisticFormECOM = () => {
         })
     }, [form, segmented])
 
-    const handleFinish = (values: ValuesConsignmentECOM) => {
+    const handleFinish = () => {
         if (submitType  === 'invoice') {
             // логика для накладной
             console.log('накладная')

@@ -85,7 +85,9 @@ export const LogisticFormRegular = () => {
         sheet.getCell('B54').value = {formula: 'B12'}
         sheet.getCell('B56').value = {formula: 'B12'}
 
-        sheet.getCell('B64').value = {formula: 'ЕСЛИ(И(AC22<>"";AC23<>"");AC22 & ", " & AC23; AC22 & AC23)'}
+        sheet.getCell('B64').value = {
+            formula: 'IF(AND(AC22<>"", AC23<>""), AC22 & ", " & AC23, AC22 & AC23)'
+        }
 
         sheet.getCell('B76').value = {formula: 'B19'}
 
