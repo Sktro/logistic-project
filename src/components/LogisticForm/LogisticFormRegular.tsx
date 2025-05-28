@@ -1,4 +1,4 @@
-import {Button, DatePicker, Form, Input, InputNumber, Select} from "antd";
+import {Button, type CheckboxChangeEvent, DatePicker, Form, Input, InputNumber, Select} from "antd";
 import style from './LogisticForm.module.css'
 import TextArea from "antd/es/input/TextArea";
 import dayjs from 'dayjs';
@@ -10,15 +10,27 @@ import {
     transportCompanyOptions,
     typeCargo
 } from "../../options";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useWatch} from "antd/es/form/Form";
 import {saveAs} from "file-saver";
 import type {ValuesConsignmentRegular} from "../../typesForm";
+import Checkbox from "antd/es/checkbox/Checkbox";
 
 export const LogisticFormRegular = () => {
     const [form] = Form.useForm()
+    const [required, setRequired] = useState(true)
     const cargoDescFirst = useWatch('cargoDescriptionsFirst', form)
     const cargoDescSecond = useWatch('cargoDescriptionsSecond', form)
+    const deliveryAddressValue = useWatch('deliveryAddress', form)
+    const transportCompanyValue = useWatch('transportCompany', form)
+
+    const deliveryAddressLabel = deliveryAddressOptions.find(
+        opt => opt.value === deliveryAddressValue
+    )?.label
+
+    const transportCompanyLabel = transportCompanyOptions.find(
+        opt => opt.value === transportCompanyValue
+    )?.label
 
     useEffect(() => {
         form.setFieldsValue({
@@ -28,8 +40,32 @@ export const LogisticFormRegular = () => {
             quantityFirst: 0,
             quantitySecond: 0,
             truckSealNumber: '',
+            cargoDescriptionsFirst: '',
+            cargoDescriptionsSecond: '',
         })
     }, [form])
+
+    const handleCheckboxChange = (e: CheckboxChangeEvent) => {
+        const isChecked = e.target.checked
+        setRequired(isChecked)
+
+        if (!isChecked) {
+            form.setFields([
+                {
+                    name: "truckSealNumber",
+                    errors: [],
+                    value: '',
+                },
+            ])
+        } else {
+            form.setFields([
+                {
+                    name: "truckSealNumber",
+                    errors: ['Введите № пломбы'],
+                },
+            ])
+        }
+    }
 
     const handleFinish = async (values: ValuesConsignmentRegular) => {
         const arrayBuffer = await fetch('regular.xlsx')
@@ -97,199 +133,206 @@ export const LogisticFormRegular = () => {
         sheet.getCell('AB84').value = {formula: 'AB68'}
 
         const buffer = await workbook.xlsx.writeBuffer()
-
-        saveAs(new Blob([buffer], {type: 'application/octet-stream'}), `${values.transportCompany}.xlsx`);
+        saveAs(new Blob([buffer], {type: 'application/octet-stream'}), `ТН Тверь ${deliveryAddressLabel} ${transportCompanyLabel} ${form.getFieldValue('driverFullName')} ${form.getFieldValue('truckNumber')}.xlsx`)
     }
 
+
+
     return (
-            <Form form={form}
-                  onFinish={handleFinish}
-                  initialValues={{deliveryDate: 1}}
-                  className={style.formContainer}>
-                <div>
-                    <Form.Item className={style.itemForm}
-                               name="driverFullName"
-                               label="ФИО водителя"
-                               rules={[{required: true, message: 'Введите ФИО водителя'}]}>
-                        <Input size={"small"}/>
-                    </Form.Item>
-                    <Form.Item className={style.itemForm}
-                               name="driverData"
-                               label="Данные водителя"
-                               rules={[{required: true, message: 'Введите данные водителя'}]}>
-                        <TextArea size={"small"} className={style.textAria}/>
-                    </Form.Item>
-                    <div className={style.infoContainer}>
-                        <div className={style.carContainer}>
-                            <Form.Item className={style.itemForm}
-                                       name="transport"
-                                       label="Марка машины"
-                                       rules={[{required: true, message: 'Введите марку машины'}]}>
-                                <Input size={"small"}/>
-                            </Form.Item>
-                            <Form.Item className={style.itemForm}
-                                       name="truckNumber"
-                                       label="Номер машины"
-                                       rules={[{required: true, message: 'Введите номер машины'}]}>
-                                <Input size={"small"}/>
-                            </Form.Item>
-                        </div>
-                        <div>
-                            <Form.Item className={style.itemForm}
-                                       name="transportCompany"
-                                       label="ТК"
-                                       rules={[{required: true, message: 'Выберите ТК'}]}>
-                                <Select size={"small"}
-                                        options={transportCompanyOptions}/>
-                            </Form.Item>
+        <Form form={form}
+              onFinish={handleFinish}
+              initialValues={{deliveryDate: 1}}
+              className={style.formContainer}>
+
+            <div>
+                <Form.Item className={style.itemForm}
+                           name="driverFullName"
+                           label="ФИО водителя"
+                           rules={[{required: true, message: 'Введите ФИО водителя'}]}>
+                    <Input size={"small"}/>
+                </Form.Item>
+                <Form.Item className={style.itemForm}
+                           name="driverData"
+                           label="Данные водителя"
+                           rules={[{required: true, message: 'Введите данные водителя'}]}>
+                    <TextArea size={"small"} className={style.textAria}/>
+                </Form.Item>
+                <div className={style.infoContainer}>
+                    <div className={style.carContainer}>
+                        <Form.Item className={style.itemForm}
+                                   name="transport"
+                                   label="Марка машины"
+                                   rules={[{required: true, message: 'Введите марку машины'}]}>
+                            <Input size={"small"}/>
+                        </Form.Item>
+                        <Form.Item className={style.itemForm}
+                                   name="truckNumber"
+                                   label="Номер машины"
+                                   rules={[{required: true, message: 'Введите номер машины'}]}>
+                            <Input size={"small"}/>
+                        </Form.Item>
+                    </div>
+                    <div>
+                        <Form.Item className={style.itemForm}
+                                   name="transportCompany"
+                                   label="ТК"
+                                   rules={[{required: true, message: 'Выберите ТК'}]}>
+                            <Select size={"small"}
+                                    options={transportCompanyOptions}/>
+                        </Form.Item>
+                        <div className={style.truckContainer}>
                             <Form.Item className={style.itemForm}
                                        name="truckSealNumber"
+                                       rules={[{required: required, message: 'Введите № пломбы'}]}
                                        label="№ пломбы">
-                                <Input size={"small"}/>
+                                <Input size={"small"} style={{maxWidth: '150px'}} disabled={!required}/>
                             </Form.Item>
+                            <Checkbox onChange={handleCheckboxChange} checked={required} style={{alignSelf: "start", marginTop: '6px'}}/>
                         </div>
+
                     </div>
-
-
                 </div>
 
-                <div>
-                    <Form.Item className={style.itemForm}
-                               name="cargoDescriptionsFirst"
-                               label="Наименование груза 1">
-                        <TextArea size={"small"} className={style.textAria}/>
-                    </Form.Item>
 
-                    <div className={style.cargo}>
-                        <Form.Item className={style.itemForm}
-                                   name="quantityFirst"
-                                   label="Кол-во груза 1"
-                                   rules={[{required: true}]}>
-                            <InputNumber min={0}
-                                         disabled={!cargoDescFirst}
-                                         size={"small"}
-                                         style={{width: '50px'}}/>
-                        </Form.Item>
-                        <Form.Item className={style.itemForm}
-                                   name="cargoQuantityFirst"
-                                   label="Тип груза 1">
-                            <Select options={typeCargo}
-                                    disabled={!cargoDescFirst}
-                                    size={"small"}
-                                    style={{width: '100px'}}/>
-                        </Form.Item>
-                    </div>
+            </div>
 
-                    <Form.Item className={style.itemForm}
-                               name="cargoDescriptionsSecond"
-                               label="Наименование груза 2">
-                        <TextArea size={"small"} className={style.textAria}/>
-                    </Form.Item>
-                    <div className={style.cargo}>
-                        <Form.Item className={style.itemForm}
-                                   name="quantitySecond"
-                                   label="Кол-во груза 2"
-                                   rules={[{required: true}]}>
-                            <InputNumber min={0}
-                                         disabled={!cargoDescSecond}
-                                         size={"small"}
-                                         style={{width: '50px'}}/>
-                        </Form.Item>
-                        <Form.Item className={style.itemForm}
-                                   name="cargoQuantitySecond"
-                                   label="Тип груза 2">
-                            <Select options={typeCargo}
-                                    disabled={!cargoDescSecond}
-                                    size={"small"}
-                                    style={{width: '100px'}}/>
-                        </Form.Item>
-                    </div>
+            <div>
+                <Form.Item className={style.itemForm}
+                           name="cargoDescriptionsFirst"
+                           label="Наименование груза 1">
+                    <TextArea size={"small"} className={style.textAria}/>
+                </Form.Item>
 
-                </div>
-
-                <div className={style.dateContainer}>
+                <div className={style.cargo}>
                     <Form.Item className={style.itemForm}
-                               name="currentDate"
-                               label="Дата">
-                        <DatePicker size={"small"}
-                                    disabled/>
-                    </Form.Item>
-                    <Form.Item className={style.itemForm}
-                               name="deliveryDate"
-                               label="Доставка"
+                               name="quantityFirst"
+                               label="Кол-во груза 1"
                                rules={[{required: true}]}>
                         <InputNumber min={0}
-                                     max={9}
+                                     disabled={!cargoDescFirst}
                                      size={"small"}
-                                     style={{width: '130px'}}
-                                     addonBefore="+"
-                                     addonAfter={'день'}/>
+                                     style={{width: '50px'}}/>
                     </Form.Item>
                     <Form.Item className={style.itemForm}
-                               name="waybillNumber"
-                               label="№ ТРН"
-                               style={{width: '130px'}}
-                               rules={[{required: true, message: 'Введите номер ТРН'}]}>
-                        <Input size={"small"}/>
+                               name="cargoQuantityFirst"
+                               label="Тип груза 1">
+                        <Select options={typeCargo}
+                                disabled={!cargoDescFirst}
+                                size={"small"}
+                                style={{width: '100px'}}/>
                     </Form.Item>
                 </div>
 
-
-                <div>
-                    <Form.Item className={style.companyLegalAddress}
-                               name="companyLegalAddress"
-                               label="Юр. адресс компании">
-                        <Select size={"small"}
-                                options={legalCompanyOptions}
-                                disabled/>
-                    </Form.Item>
-                    <div className={style.addressContainer}>
-                        <Form.Item className={style.itemForm}
-                                   name="deliveryAddress"
-                                   label="Доставка"
-                                   rules={[{required: true, message: 'Выберите адресс доставки'}]}>
-                            <Select size={"small"}
-                                    style={{width: '130px'}}
-                                    showSearch
-                                    options={deliveryAddressOptions}/>
-                        </Form.Item>
-                        <Form.Item className={style.itemForm}
-                                   name="loadingAddress"
-                                   label="Погрузка"
-                                   rules={[{required: true, message: 'Выберите адресс погрузки'}]}>
-                            <Select size={"small"}
-                                    style={{width: '100px'}}
-                                    options={loadingAddressOptions}/>
-                        </Form.Item>
-                        <Form.Item className={style.itemForm}
-                                   name="ownershipType"
-                                   label="Тип владения"
-                                   rules={[{required: true, message: 'Выберите тип владения'}]}>
-                            <Select size={"small"}
-                                    style={{width: '58px'}}
-                                    options={ownershipTypeOptions}/>
-                        </Form.Item>
-                    </div>
-
-                </div>
-
-                <div className={style.footerContainer}>
-                    <Form.Item className={style.itemForm}
-                               name="specialist"
-                               label="Подпись"
-                               rules={[{required: true, message: 'Выберите подпись'}]}>
-                        <Select size={"small"}
-                                style={{width: '165px'}}
-                                options={specialistOptions}/>
-                    </Form.Item>
-                </div>
-                <Form.Item>
-                    <Button type="default"
-                            htmlType="submit">
-                        Скачать накладную
-                    </Button>
+                <Form.Item className={style.itemForm}
+                           name="cargoDescriptionsSecond"
+                           label="Наименование груза 2">
+                    <TextArea size={"small"} className={style.textAria}/>
                 </Form.Item>
-            </Form>
+                <div className={style.cargo}>
+                    <Form.Item className={style.itemForm}
+                               name="quantitySecond"
+                               label="Кол-во груза 2"
+                               rules={[{required: true}]}>
+                        <InputNumber min={0}
+                                     disabled={!cargoDescSecond}
+                                     size={"small"}
+                                     style={{width: '50px'}}/>
+                    </Form.Item>
+                    <Form.Item className={style.itemForm}
+                               name="cargoQuantitySecond"
+                               label="Тип груза 2">
+                        <Select options={typeCargo}
+                                disabled={!cargoDescSecond}
+                                size={"small"}
+                                style={{width: '100px'}}/>
+                    </Form.Item>
+                </div>
+
+            </div>
+
+            <div className={style.dateContainer}>
+                <Form.Item className={style.itemForm}
+                           name="currentDate"
+                           label="Дата">
+                    <DatePicker size={"small"}
+                                disabled/>
+                </Form.Item>
+                <Form.Item className={style.itemForm}
+                           name="deliveryDate"
+                           label="Доставка"
+                           rules={[{required: true}]}>
+                    <InputNumber min={0}
+                                 max={9}
+                                 size={"small"}
+                                 style={{width: '130px'}}
+                                 addonBefore="+"
+                                 addonAfter={'день'}/>
+                </Form.Item>
+                <Form.Item className={style.itemForm}
+                           name="waybillNumber"
+                           label="№ ТРН"
+                           style={{width: '130px'}}
+                           rules={[{required: true, message: 'Введите номер ТРН'}]}>
+                    <Input size={"small"}/>
+                </Form.Item>
+            </div>
+
+
+            <div>
+                <Form.Item className={style.companyLegalAddress}
+                           name="companyLegalAddress"
+                           label="Юр. адресс компании">
+                    <Select size={"small"}
+                            options={legalCompanyOptions}
+                            disabled/>
+                </Form.Item>
+                <div className={style.addressContainer}>
+                    <Form.Item className={style.itemForm}
+                               name="deliveryAddress"
+                               label="Доставка"
+                               rules={[{required: true, message: 'Выберите адресс доставки'}]}>
+                        <Select size={"small"}
+                                style={{width: '130px'}}
+                                showSearch
+                                options={deliveryAddressOptions}/>
+                    </Form.Item>
+                    <Form.Item className={style.itemForm}
+                               name="loadingAddress"
+                               label="Погрузка"
+                               rules={[{required: true, message: 'Выберите адресс погрузки'}]}>
+                        <Select size={"small"}
+                                style={{width: '100px'}}
+                                options={loadingAddressOptions}/>
+                    </Form.Item>
+                    <Form.Item className={style.itemForm}
+                               name="ownershipType"
+                               label="Тип владения"
+                               rules={[{required: true, message: 'Выберите тип владения'}]}>
+                        <Select size={"small"}
+                                style={{width: '58px'}}
+                                options={ownershipTypeOptions}/>
+                    </Form.Item>
+                </div>
+
+            </div>
+
+            <div className={style.footerContainer}>
+                <Form.Item className={style.itemForm}
+                           name="specialist"
+                           label="Подпись"
+                           rules={[{required: true, message: 'Выберите подпись'}]}>
+                    <Select size={"small"}
+                            style={{width: '165px'}}
+                            options={specialistOptions}/>
+                </Form.Item>
+            </div>
+            <Form.Item>
+                <Button type="default"
+                        htmlType="submit">
+                    Скачать накладную
+                </Button>
+            </Form.Item>
+        </Form>
 
     )
 }

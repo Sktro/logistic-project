@@ -41,6 +41,11 @@
     display: none;
 }
 
+.truckContainer {
+    display: flex;
+    gap: 5px;
+}
+
 
 /*---------------------------------------------------*/
 

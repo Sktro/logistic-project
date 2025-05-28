@@ -34,9 +34,7 @@ export interface ValuesConsignmentECOM  {
     deliveryAddress: string // Адрес доставки
     transport: string // Марка машины
     truckNumber: string // Номер машины
-    loadingAddress: string // Адрес погрузки
     truckSealNumber: string // № пломбы
     specialist: string // Подпись
-    ownershipType: string // Тип владения
     driverFullName: string // ФИО водителя
 }

@@ -3,8 +3,7 @@ import style from "./LogisticForm.module.css";
 import TextArea from "antd/es/input/TextArea";
 import {
     deliveryAddressOptions,
-    legalCompanyOptions,
-    loadingAddressOptions, ownershipTypeOptions, specialistOptions,
+    legalCompanyOptions, specialistOptions,
     transportCompanyOptions
 } from "../../options";
 import {useEffect, useState} from "react";
@@ -49,15 +48,13 @@ export const LogisticFormECOM = () => {
             transport: '',
             truckNumber: '',
             waybillNumber: '',
-            deliveryAddress: undefined,
-            loadingAddress: undefined,
-            ownershipType: undefined,
+            deliveryAddress: segmented === 'ЕКОМ №1' ? deliveryAddressOptions[0].value : deliveryAddressOptions[4].value,
             specialist: undefined,
         })
     }, [form, segmented])
 
     const handleFinish = () => {
-        if (submitType  === 'invoice') {
+        if (submitType === 'invoice') {
             // логика для накладной
             console.log('накладная')
         } else {
@@ -192,36 +189,12 @@ export const LogisticFormECOM = () => {
                 <div className={style.addressContainer}>
                     <Form.Item className={style.itemForm}
                                name="deliveryAddress"
-                               label="Доставка"
-                               rules={[{required: true, message: 'Выберите адресс доставки'}]}>
+                               label="Доставка">
                         <Select size={"small"}
                                 style={{width: '130px'}}
                                 showSearch
                                 options={deliveryAddressOptions}/>
                     </Form.Item>
-                    <Form.Item className={style.itemForm}
-                               name="loadingAddress"
-                               label="Погрузка"
-                               rules={[{required: true, message: 'Выберите адресс погрузки'}]}>
-                        <Select size={"small"}
-                                style={{width: '100px'}}
-                                options={loadingAddressOptions}/>
-                    </Form.Item>
-                    <Form.Item className={style.itemForm}
-                               name="ownershipType"
-                               label="Тип владения"
-                               rules={[{required: true, message: 'Выберите тип владения'}]}>
-                        <Select size={"small"}
-                                style={{width: '60px'}}
-                                options={ownershipTypeOptions}/>
-                    </Form.Item>
-                </div>
-
-                {segmented === 'ЕКОМ №1' && <EcomShopsForm/>}
-                {segmented === 'ЕКОМ №2' && <EcomTwoShopsForm/>}
-
-
-                <div className={style.footerContainer}>
                     <Form.Item className={style.itemForm}
                                name="specialist"
                                label="Подпись"
@@ -231,6 +204,10 @@ export const LogisticFormECOM = () => {
                                 options={specialistOptions}/>
                     </Form.Item>
                 </div>
+
+                {segmented === 'ЕКОМ №1' && <EcomShopsForm/>}
+                {segmented === 'ЕКОМ №2' && <EcomTwoShopsForm/>}
+
                 <div className={style.buttonContainer}>
                     <Button
                         htmlType="submit"
