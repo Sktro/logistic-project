@@ -136,8 +136,6 @@ export const LogisticFormRegular = () => {
         saveAs(new Blob([buffer], {type: 'application/octet-stream'}), `ТН Тверь ${deliveryAddressLabel} ${transportCompanyLabel} ${form.getFieldValue('driverFullName')} ${form.getFieldValue('truckNumber')}.xlsx`)
     }
 
-
-
     return (
         <Form form={form}
               onFinish={handleFinish}
@@ -192,7 +190,6 @@ export const LogisticFormRegular = () => {
 
                     </div>
                 </div>
-
 
             </div>
 

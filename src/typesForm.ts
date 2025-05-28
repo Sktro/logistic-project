@@ -25,11 +25,13 @@ export interface ValuesConsignmentRegular  {
 
 export interface ValuesConsignmentECOM  {
     transportCompany: string // Транспортная компания
-    phoneNumberDriver: number // Телефон водителя
+    driverPhoneNumber: number // Телефон водителя
     driverData: string // Данные водителя
     currentDate: dayjs.Dayjs // Дата(текущая)
     waybillNumber: string // № ТРН
     deliveryDate: string // Дата доставки
+    cargoFirst: number // груз в коробках
+    cargoSecond: number // груз в пустых б/б
     companyLegalAddress: string // Юр.адресс компании
     deliveryAddress: string // Адрес доставки
     transport: string // Марка машины

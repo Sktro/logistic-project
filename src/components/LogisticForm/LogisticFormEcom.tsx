@@ -10,6 +10,10 @@ import {useEffect, useState} from "react";
 import dayjs from "dayjs";
 import {EcomShopsForm} from "./EcomOneShopsForm";
 import {EcomTwoShopsForm} from "./EcomTwoShopsForm";
+import type {ValuesConsignmentECOM} from "../../typesForm";
+import ExcelJS from "exceljs";
+import {saveAs} from "file-saver";
+import {useWatch} from "antd/es/form/Form";
 
 type SegmentedType = 'ЕКОМ №1' | 'ЕКОМ №2'
 type submitType = 'invoice' | 'route'
@@ -18,6 +22,17 @@ export const LogisticFormECOM = () => {
     const [form] = Form.useForm()
     const [segmented, setSegmented] = useState<SegmentedType>('ЕКОМ №1')
     const [submitType, setSubmitType] = useState<submitType>('invoice')
+    const deliveryAddressValue = useWatch('deliveryAddress', form)
+    const transportCompanyValue = useWatch('transportCompany', form)
+
+    const deliveryAddressLabel = deliveryAddressOptions.find(
+        opt => opt.value === deliveryAddressValue
+    )?.label
+
+    const transportCompanyLabel = transportCompanyOptions.find(
+        opt => opt.value === transportCompanyValue
+    )?.label
+    // еком №1 + адрес досавки + ТК + ФИО + номер машины
 
     useEffect(() => {
         form.setFieldsValue({
@@ -53,10 +68,63 @@ export const LogisticFormECOM = () => {
         })
     }, [form, segmented])
 
-    const handleFinish = () => {
+    const handleFinish = async (values: ValuesConsignmentECOM) => {
         if (submitType === 'invoice') {
             // логика для накладной
-            console.log('накладная')
+            const arrayBuffer = await fetch('ecom.xlsx')
+                .then(r => {
+                    if (!r.ok) throw new Error(`HTTP ${r.status}`)
+                    return r.arrayBuffer()
+                })
+            const workbook = new ExcelJS.Workbook()
+            await workbook.xlsx.load(arrayBuffer)
+            const sheet = workbook.worksheets[0]
+
+            const deliveryDateOffset = Number(values.deliveryDate)
+            const deliveryDateCalc = values.currentDate.add(deliveryDateOffset, 'day').format('DD.MM.YYYY')
+            const cargoDescriptions = values.cargoSecond !== 0 ? `коробки - ${values.cargoFirst} шт., пустые б/б - ${values.cargoSecond} шт.` : `коробки - ${values.cargoFirst} шт.`
+
+            const cellMap: Record<string, string> = {
+                D8: values.currentDate.format('DD.MM.YYYY'),
+                R8: `${values.currentDate.format('DD.MM.YYYY')}-${values.waybillNumber}`,
+                B12: values.companyLegalAddress,
+                B19: values.deliveryAddress,
+                B23: cargoDescriptions,
+                B37: `Дата и время доставки - ${deliveryDateCalc}`,
+                B42: values.transportCompany,
+                AD42: `${values.driverFullName}, ${values.driverData}, номер телефона: ${values.driverPhoneNumber}`,
+                B45: String(values.transport),
+                AD45: String(values.truckNumber).toUpperCase(),
+                B66: `Пломба № ${values.truckSealNumber}`,
+                B68: values.specialist,
+                AB68: values.driverFullName,
+            }
+
+            for (const [addr, text] of Object.entries(cellMap)) {
+                const cell = sheet.getCell(addr)
+                cell.value = text
+                cell.numFmt = '@'
+            }
+
+            sheet.getCell('AF8').value = {formula: 'D8'}
+            sheet.getCell('AT8').value = {formula: 'R8'}
+            sheet.getCell('B17').value = {formula: 'B12'}
+            sheet.getCell('B54').value = {formula: 'B12'}
+            sheet.getCell('B56').value = {formula: 'B12'}
+            sheet.getCell('AB58').value = {formula: 'D8'}
+            sheet.getCell('B60').value = {formula: 'D8'}
+            sheet.getCell('AB60').value = {formula: 'D8'}
+            sheet.getCell('B64').value = {formula: 'B23'}
+            sheet.getCell('B64').value = {formula: 'B23'}
+            sheet.getCell('B76').value = {formula: 'B19'}
+            sheet.getCell('AB76').value = {formula: 'B37'}
+            sheet.getCell('B80').value = {formula: 'B23'}
+            sheet.getCell('B80').value = {formula: 'B23'}
+            sheet.getCell('AB80').value = {formula: 'AD23'}
+            sheet.getCell('AB84').value = {formula: 'AB68'}
+
+            const buffer = await workbook.xlsx.writeBuffer()
+            saveAs(new Blob([buffer], {type: 'application/octet-stream'}), `${segmented} ${deliveryAddressLabel} ${transportCompanyLabel} ${form.getFieldValue('driverFullName')} ${form.getFieldValue('truckNumber')}.xlsx`)
         } else {
             // логика для маршрутного листа
             console.log('маршрутный лист')
@@ -156,6 +224,7 @@ export const LogisticFormECOM = () => {
                                rules={[{required: true}]}>
                         <InputNumber min={0}
                                      size={"small"}
+                                     disabled={segmented === 'ЕКОМ №2'}
                                      style={{width: '150px'}}
                                      addonAfter={'пустые б/б'}/>
                     </Form.Item>
