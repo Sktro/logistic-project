@@ -3,12 +3,12 @@ import style from "./LogisticForm.module.css";
 import TextArea from "antd/es/input/TextArea";
 import {
     deliveryAddressOptions,
-    legalCompanyOptions, specialistOptions,
+    legalCompanyOptions, shopsOptionsECOM1, shopsOptionsECOM2, specialistOptions,
     transportCompanyOptions
 } from "../../options";
 import {useEffect, useState} from "react";
 import dayjs from "dayjs";
-import {EcomShopsForm} from "./EcomOneShopsForm";
+import {EcomOneShopsForm} from "./EcomOneShopsForm";
 import {EcomTwoShopsForm} from "./EcomTwoShopsForm";
 import type {ValuesConsignmentECOM} from "../../typesForm";
 import ExcelJS from "exceljs";
@@ -24,6 +24,11 @@ export const LogisticFormECOM = () => {
     const [submitType, setSubmitType] = useState<submitType>('invoice')
     const deliveryAddressValue = useWatch('deliveryAddress', form)
     const transportCompanyValue = useWatch('transportCompany', form)
+    const specialistValue = useWatch('specialist', form)
+
+    const specialistLabel = specialistOptions.find(
+        opt => opt.value === specialistValue
+    )?.label ?? ""
 
     const deliveryAddressLabel = deliveryAddressOptions.find(
         opt => opt.value === deliveryAddressValue
@@ -127,9 +132,117 @@ export const LogisticFormECOM = () => {
             saveAs(new Blob([buffer], {type: 'application/octet-stream'}), `${segmented} ${deliveryAddressLabel} ${transportCompanyLabel} ${form.getFieldValue('driverFullName')} ${form.getFieldValue('truckNumber')}.xlsx`)
         } else {
             // логика для маршрутного листа
-            console.log('маршрутный лист')
+            const arrayBuffer = await fetch('rl.xlsx')
+                .then(r => {
+                    if (!r.ok) throw new Error(`HTTP ${r.status}`)
+                    return r.arrayBuffer()
+                })
+            const workbook = new ExcelJS.Workbook()
+            await workbook.xlsx.load(arrayBuffer)
+            const sheet = workbook.worksheets[0]
+
+            const cargoDescriptions = values.cargoSecond !== 0
+                ? `коробки - ${values.cargoFirst} шт., пустые б/б - ${values.cargoSecond} шт.`
+                : `коробки - ${values.cargoFirst} шт.`
+
+            const baseCellMap: Record<string, string> = {
+                B4: values.currentDate.format('DD.MM.YYYY'),
+                B6: `${values.transport} ${values.truckNumber}`,
+                G6: values.transportCompany,
+                B8: `${values.driverFullName}, тел. ${values.driverPhoneNumber}`,
+                G12: values.truckSealNumber,
+                H12: specialistLabel ?? '',
+                A20: `Итого: ${cargoDescriptions}`,
+            }
+
+            if (segmented === 'ЕКОМ №1') {
+                const ecom1CellMap: Record<string, string> = {
+                    ...baseCellMap,
+                    A2: `МАРШРУТНЫЙ ЛИСТ № 1`,
+
+                    A13: shopsOptionsECOM1[0].shop,
+                    B13: shopsOptionsECOM1[0].deliveryTime,
+                    E13: `8-265 - ${values.smolenka} кор`,
+
+                    A14: shopsOptionsECOM1[1].shop,
+                    B14: shopsOptionsECOM1[1].deliveryTime,
+                    E14: `8-267 - ${values.okeaniya} кор`,
+
+                    A15: shopsOptionsECOM1[2].shop,
+                    B15: shopsOptionsECOM1[2].deliveryTime,
+                    E15: `8-279 - ${values.kapitoliy} кор`,
+
+                    A16: shopsOptionsECOM1[3].shop,
+                    B16: shopsOptionsECOM1[3].deliveryTime,
+                    E16: `8-291 - ${values.modniy} кор`,
+
+                    A17: shopsOptionsECOM1[4].shop,
+                    B17: shopsOptionsECOM1[4].deliveryTime,
+                    E17: `8-260 - ${values.aviapark} кор`,
+
+                    A18: shopsOptionsECOM1[4].shop,
+                    B18: shopsOptionsECOM1[4].deliveryTime,
+                    E18: `8-255 - ${values.evropolis} кор`,
+
+                    A19: shopsOptionsECOM1[4].shop,
+                    B19: shopsOptionsECOM1[4].deliveryTime,
+                    E19: `8-252 - ${values.megaHimki} кор`,
+                }
+
+                for (const [addr, text] of Object.entries(ecom1CellMap)) {
+                    const cell = sheet.getCell(addr)
+                    cell.value = text
+                    cell.numFmt = '@'
+                }
+
+                const buffer = await workbook.xlsx.writeBuffer()
+                saveAs(new Blob([buffer], {type: 'application/octet-stream'}), `${segmented} МАРШРУТНЫЙ ЛИСТ ${deliveryAddressLabel} ${form.getFieldValue('driverFullName')} ${form.getFieldValue('truckNumber')}.xlsx`)
+            } else {
+                const ecom2CellMap: Record<string, string> = {
+                    ...baseCellMap,
+                    A2: `МАРШРУТНЫЙ ЛИСТ № 2`,
+                    B12: '16-30',
+
+                    A13: shopsOptionsECOM2[0].shop,
+                    B13: shopsOptionsECOM2[0].deliveryTime,
+                    E13: `8-253 - ${values.belayaDacha} кор`,
+
+                    A14: shopsOptionsECOM2[1].shop,
+                    B14: shopsOptionsECOM2[1].deliveryTime,
+                    E14: `8-280 - ${values.kashirskayaPlaza} кор`,
+
+                    A15: shopsOptionsECOM2[2].shop,
+                    B15: shopsOptionsECOM2[2].deliveryTime,
+                    E15: `8-269 - ${values.columbus} кор`,
+
+                    A16: shopsOptionsECOM2[3].shop,
+                    B16: shopsOptionsECOM2[3].deliveryTime,
+                    E16: `8-277 - ${values.tepliyStan} кор`,
+
+                    A17: shopsOptionsECOM2[4].shop,
+                    B17: shopsOptionsECOM2[4].deliveryTime,
+                    E17: `8-272 - ${values.vegasKuncevo} кор`,
+
+                    A18: shopsOptionsECOM2[4].shop,
+                    B18: shopsOptionsECOM2[4].deliveryTime,
+                    E18: `8-273 - ${values.vegasMyakinino} кор`,
+
+                    A19: shopsOptionsECOM2[4].shop,
+                    B19: shopsOptionsECOM2[4].deliveryTime,
+                    E19: `8-264 - ${values.rigaMoll} кор`,
+                }
+
+                for (const [addr, text] of Object.entries(ecom2CellMap)) {
+                    const cell = sheet.getCell(addr)
+                    cell.value = text
+                    cell.numFmt = '@'
+                }
+
+                const buffer = await workbook.xlsx.writeBuffer()
+                saveAs(new Blob([buffer], {type: 'application/octet-stream'}), `${segmented} МАРШРУТНЫЙ ЛИСТ ${deliveryAddressLabel} ${form.getFieldValue('driverFullName')} ${form.getFieldValue('truckNumber')}.xlsx`)
+            }
         }
-    };
+    }
 
     const handleChangeSegmented = (value: SegmentedType) => {
         setSegmented(value)
@@ -203,6 +316,7 @@ export const LogisticFormECOM = () => {
                         </Form.Item>
                         <Form.Item className={style.itemForm}
                                    name="truckSealNumber"
+                                   rules={[{required: true, message: 'Введите № пломбы'}]}
                                    label="№ пломбы">
                             <Input size={"small"}/>
                         </Form.Item>
@@ -274,7 +388,7 @@ export const LogisticFormECOM = () => {
                     </Form.Item>
                 </div>
 
-                {segmented === 'ЕКОМ №1' && <EcomShopsForm/>}
+                {segmented === 'ЕКОМ №1' && <EcomOneShopsForm/>}
                 {segmented === 'ЕКОМ №2' && <EcomTwoShopsForm/>}
 
                 <div className={style.buttonContainer}>

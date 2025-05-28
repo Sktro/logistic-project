@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 
-export interface ValuesConsignmentRegular  {
+export interface ValuesConsignmentRegular {
     transportCompany: string // Транспортная компания
     driverData: string // Данные водителя
     currentDate: dayjs.Dayjs // Дата(текущая)
@@ -23,7 +23,7 @@ export interface ValuesConsignmentRegular  {
     driverFullName: string // ФИО водителя
 }
 
-export interface ValuesConsignmentECOM  {
+export interface ValuesConsignmentECOM {
     transportCompany: string // Транспортная компания
     driverPhoneNumber: number // Телефон водителя
     driverData: string // Данные водителя
@@ -39,4 +39,22 @@ export interface ValuesConsignmentECOM  {
     truckSealNumber: string // № пломбы
     specialist: string // Подпись
     driverFullName: string // ФИО водителя
+
+    // направления ecom #1
+    smolenka: number // Смоленский пассаж-2
+    okeaniya: number // Океания
+    kapitoliy: number // Капитолий Вернадского
+    modniy: number // Модный сезон
+    aviapark: number // Авиапарк
+    evropolis: number // Европолис
+    megaHimki: number // Мега Химки
+
+    // направления ecom #2
+    belayaDacha: number // Мега Белая Дача
+    kashirskayaPlaza: number // Каширская Плаза
+    columbus: number // Колумбус
+    tepliyStan: number // Теплый Стан
+    vegasKuncevo: number // Вегас Кунцево
+    vegasMyakinino: number // Вегас Мякинино
+    rigaMoll: number // Рига Молл
 }

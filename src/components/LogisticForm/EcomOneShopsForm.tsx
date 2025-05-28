@@ -11,7 +11,7 @@ const centers = [
     {name: 'megaHimki', label: 'Мега Химки'},
 ];
 
-export const EcomShopsForm = () => {
+export const EcomOneShopsForm = () => {
     const [form] = Form.useForm()
     useEffect(() => {
         form.setFieldsValue({
