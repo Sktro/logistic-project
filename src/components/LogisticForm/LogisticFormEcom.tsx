@@ -37,7 +37,6 @@ export const LogisticFormECOM = () => {
     const transportCompanyLabel = transportCompanyOptions.find(
         opt => opt.value === transportCompanyValue
     )?.label
-    // еком №1 + адрес досавки + ТК + ФИО + номер машины
 
     useEffect(() => {
         form.setFieldsValue({
@@ -180,12 +179,12 @@ export const LogisticFormECOM = () => {
                     B17: shopsOptionsECOM1[4].deliveryTime,
                     E17: `8-260 - ${values.aviapark} кор`,
 
-                    A18: shopsOptionsECOM1[4].shop,
-                    B18: shopsOptionsECOM1[4].deliveryTime,
+                    A18: shopsOptionsECOM1[5].shop,
+                    B18: shopsOptionsECOM1[5].deliveryTime,
                     E18: `8-255 - ${values.evropolis} кор`,
 
-                    A19: shopsOptionsECOM1[4].shop,
-                    B19: shopsOptionsECOM1[4].deliveryTime,
+                    A19: shopsOptionsECOM1[6].shop,
+                    B19: shopsOptionsECOM1[6].deliveryTime,
                     E19: `8-252 - ${values.megaHimki} кор`,
                 }
 
@@ -223,12 +222,12 @@ export const LogisticFormECOM = () => {
                     B17: shopsOptionsECOM2[4].deliveryTime,
                     E17: `8-272 - ${values.vegasKuncevo} кор`,
 
-                    A18: shopsOptionsECOM2[4].shop,
-                    B18: shopsOptionsECOM2[4].deliveryTime,
+                    A18: shopsOptionsECOM2[5].shop,
+                    B18: shopsOptionsECOM2[5].deliveryTime,
                     E18: `8-273 - ${values.vegasMyakinino} кор`,
 
-                    A19: shopsOptionsECOM2[4].shop,
-                    B19: shopsOptionsECOM2[4].deliveryTime,
+                    A19: shopsOptionsECOM2[6].shop,
+                    B19: shopsOptionsECOM2[6].deliveryTime,
                     E19: `8-264 - ${values.rigaMoll} кор`,
                 }
 
