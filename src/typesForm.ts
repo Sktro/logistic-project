@@ -1,5 +1,7 @@
 import dayjs from "dayjs";
 
+export type submitActionsType = 'invoice' | 'route'
+
 export interface ValuesConsignmentRegular {
     transportCompany: string // Транспортная компания
     driverData: string // Данные водителя
@@ -40,7 +42,7 @@ export interface ValuesConsignmentECOM {
     specialist: string // Подпись
     driverFullName: string // ФИО водителя
 
-    // направления ecom #1
+    // направления e-com #1
     smolenka: number // Смоленский пассаж-2
     okeaniya: number // Океания
     kapitoliy: number // Капитолий Вернадского
@@ -49,7 +51,7 @@ export interface ValuesConsignmentECOM {
     evropolis: number // Европолис
     megaHimki: number // Мега Химки
 
-    // направления ecom #2
+    // направления e-com #2
     belayaDacha: number // Мега Белая Дача
     kashirskayaPlaza: number // Каширская Плаза
     columbus: number // Колумбус

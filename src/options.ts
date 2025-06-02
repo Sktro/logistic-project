@@ -190,3 +190,23 @@ export const shopsOptionsECOM2 = [
         deliveryTime: '13-00'
     },
 ]
+
+export const firstRouteECOM = [
+    {name: 'smolenka', label: 'Смоленский пассаж-2'},
+    {name: 'okeaniya', label: 'Океания'},
+    {name: 'kapitoliy', label: 'Капитолий Вернадского'},
+    {name: 'modniy', label: 'Модный сезон'},
+    {name: 'aviapark', label: 'Авиапарк'},
+    {name: 'evropolis', label: 'Европолис'},
+    {name: 'megaHimki', label: 'Мега Химки'},
+]
+
+export const secondRouteECOM = [
+    {name: 'belayaDacha', label: 'Мега Белая Дача'},
+    {name: 'kashirskayaPlaza', label: 'Каширская Плаза'},
+    {name: 'columbus', label: 'Колумбус'},
+    {name: 'tepliyStan', label: 'Теплый Стан'},
+    {name: 'vegasKuncevo', label: 'Вегас Кунцево'},
+    {name: 'vegasMyakinino', label: 'Вегас Мякинино'},
+    {name: 'rigaMoll', label: 'Рига Молл'},
+]
