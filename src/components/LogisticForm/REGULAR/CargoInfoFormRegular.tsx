@@ -5,10 +5,9 @@ import {typeCargo} from "../../../options";
 import {useWatch} from "antd/es/form/Form";
 
 export const CargoInfoFormRegular = () => {
-    const [form] = Form.useForm()
-    const cargoDescFirst = useWatch('cargoDescriptionsFirst', form)
-    const cargoDescSecond = useWatch('cargoDescriptionsSecond', form)
-
+    const cargoDescFirst = useWatch('cargoDescriptionsFirst')
+    const cargoDescSecond = useWatch('cargoDescriptionsSecond')
+    console.log(cargoDescFirst)
   return (
       <>
           <Form.Item className={style.itemForm}
