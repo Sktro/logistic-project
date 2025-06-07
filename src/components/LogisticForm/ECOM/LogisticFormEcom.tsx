@@ -57,7 +57,7 @@ export const LogisticFormECOM = () => {
             transport: '',
             truckNumber: '',
             waybillNumber: '',
-            deliveryAddress: segmented === 'ЕКОМ №1' ? deliveryAddressOptions.find(s => s.label === "Химки") : deliveryAddressOptions.find(s => s.label === "Рига"),
+            deliveryAddress: segmented === 'ЕКОМ №1' ? deliveryAddressOptions.find(s => s.label === "Химки")?.value : deliveryAddressOptions.find(s => s.label === "Рига")?.value,
             specialist: undefined,
         })
     }, [form, segmented])
