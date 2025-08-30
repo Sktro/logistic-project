@@ -1,7 +1,6 @@
 import {Form, Segmented} from "antd";
 import style from "../LogisticForm.module.css";
 import {
-    deliveryAddressOptions,
     legalCompanyOptions, shopsOptionsECOM1, shopsOptionsECOM2, specialistOptions,
     transportCompanyOptions
 } from "../../../options";
@@ -17,10 +16,16 @@ import {CargoInfoFormEcom} from "./CargoInfoFormEcom";
 import {DateAndWaybillFormEcom} from "./DateAndWaybillFormEcom";
 import {DestinationAndSignatureFormEcom} from "./DestinationAndSignatureFormEcom";
 import {DocumentDownloadPanel} from "./DocumentDownloadPanel";
+import {loadDeliveryAddresses} from "../../../api/deliveryAddresses.ts";
 
 type SegmentedType = 'ЕКОМ №1' | 'ЕКОМ №2'
 
-export const LogisticFormECOM = () => {
+interface LogisticFormECOMProps {
+    deliveryAddressOptionsFromEcom: { label: string, value: string }[]
+    setDeliveryAddressOptionsFromEcom: (options: { label: string, value: string }[]) => void;
+}
+
+export const LogisticFormECOM = ({setDeliveryAddressOptionsFromEcom, deliveryAddressOptionsFromEcom}: LogisticFormECOMProps) => {
     const [form] = Form.useForm()
     const [segmented, setSegmented] = useState<SegmentedType>('ЕКОМ №1')
     const [submitType, setSubmitType] = useState<submitActionsType>('invoice')
@@ -29,6 +34,7 @@ export const LogisticFormECOM = () => {
     const specialistValue = useWatch('specialist', form)
 
     useEffect(() => {
+        loadDeliveryAddresses().then(setDeliveryAddressOptionsFromEcom);
         form.setFieldsValue({
             transportCompany: transportCompanyOptions[2].value,
             companyLegalAddress: legalCompanyOptions[0].value,
@@ -57,14 +63,14 @@ export const LogisticFormECOM = () => {
             transport: '',
             truckNumber: '',
             waybillNumber: '',
-            deliveryAddress: segmented === 'ЕКОМ №1' ? deliveryAddressOptions.find(s => s.label === "Химки")?.value : deliveryAddressOptions.find(s => s.label === "Рига")?.value,
+            deliveryAddress: segmented === 'ЕКОМ №1' ? deliveryAddressOptionsFromEcom.find(s => s.label === "Химки")?.value : deliveryAddressOptionsFromEcom.find(s => s.label === "Рига")?.value,
             specialist: undefined,
         })
     }, [form, segmented])
 
     const handleFinish = async (values: ValuesConsignmentECOM) => {
         const specialistLabel = specialistOptions.find(opt => opt.value === specialistValue)?.label ?? ""
-        const deliveryAddressLabel = deliveryAddressOptions.find(opt => opt.value === deliveryAddressValue)?.label ?? ""
+        const deliveryAddressLabel = deliveryAddressOptionsFromEcom.find(opt => opt.value === deliveryAddressValue)?.label ?? ""
         const transportCompanyLabel = transportCompanyOptions.find(opt => opt.value === transportCompanyValue)?.label ?? ""
         await generateAndSaveExcelECOM({
             values,
@@ -96,7 +102,7 @@ export const LogisticFormECOM = () => {
                 <DriverTransportFormEcom/>
                 <CargoInfoFormEcom segmented={segmented}/>
                 <DateAndWaybillFormEcom/>
-                <DestinationAndSignatureFormEcom/>
+                <DestinationAndSignatureFormEcom deliveryAddressOptionsFromEcom={deliveryAddressOptionsFromEcom}/>
                 {segmented === 'ЕКОМ №1' ? <RouteOneShopsFormEcom/> : <RouteTwoShopsFormEcom/>}
                 <DocumentDownloadPanel setSubmitType={setSubmitType}/>
             </Form>

@@ -1,32 +1,19 @@
 import {Header} from "./components/Header/Header";
 import style from './App.module.css'
-import {LogisticFormRegular} from "./components/LogisticForm/REGULAR/LogisticFormRegular";
 import {useState} from "react";
-import {Radio} from "antd";
-import {LogisticFormECOM} from "./components/LogisticForm/ECOM/LogisticFormEcom";
+import LogisticForm from "./components/LogisticForm";
+import Settings from "./components/Settings";
 
-type ConsignmentType = 'regular' | 'ecom'
 
 function App() {
-    const [consignment, setConsignment] = useState<ConsignmentType>('regular')
+    const [settings, setSettings] = useState<boolean>(false);
 
     return (
         <>
-            <Header/>
+            <Header settings={settings} setSettings={setSettings}/>
             <main className={style.mainContainer}>
-                <span>Форма заполнения ТН</span>
-                <Radio.Group
-                    style={{margin: '10px 0'}}
-                    onChange={(e) => setConsignment(e.target.value)}
-                    value={consignment}
-                    options={[
-                        {value: 'regular', label: 'Регуляр'},
-                        {value: 'ecom', label: 'ЕКОМ'},
-                    ]}
-                />
-
-                {consignment === 'regular' && <LogisticFormRegular/>}
-                {consignment === 'ecom' && <LogisticFormECOM/>}
+                {!settings && <LogisticForm/>}
+                {settings && <Settings/>}
             </main>
         </>
     )

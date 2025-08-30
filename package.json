@@ -12,10 +12,13 @@
   },
   "dependencies": {
     "@ant-design/icons": "5.x",
+    "@types/papaparse": "^5.3.16",
     "antd": "^5.25.2",
+    "axios": "^1.11.0",
     "dayjs": "^1.11.13",
     "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
+    "papaparse": "^5.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "xlsx": "^0.18.5"

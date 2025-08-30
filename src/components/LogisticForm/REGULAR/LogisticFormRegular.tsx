@@ -2,7 +2,7 @@ import {Form} from "antd";
 import style from '../LogisticForm.module.css'
 import dayjs from 'dayjs';
 import {
-    deliveryAddressOptions, legalCompanyOptions,
+    legalCompanyOptions,
     transportCompanyOptions,
 } from "../../../options";
 import {useEffect} from "react";
@@ -14,13 +14,22 @@ import {CargoInfoFormRegular} from "./CargoInfoFormRegular";
 import {DateAndWaybillFormRegular} from "./DateAndWaybillFormRegular";
 import {LocationDetailsFormRegular} from "./LocationDetailsFormRegular";
 import {SignatureAndDownloadFormRegular} from "./SignatureAndDownloadFormRegular";
+import {loadDeliveryAddresses} from "../../../api/deliveryAddresses.ts";
 
-export const LogisticFormRegular = () => {
+interface LogisticFormRegularProps {
+    deliveryAddressOptions: { label: string, value: string }[]
+    setDeliveryAddressOptions: (options: { label: string, value: string }[]) => void;
+}
+
+export const LogisticFormRegular = ({setDeliveryAddressOptions, deliveryAddressOptions}: LogisticFormRegularProps) => {
     const [form] = Form.useForm()
     const deliveryAddressValue = useWatch('deliveryAddress', form)
     const transportCompanyValue = useWatch('transportCompany', form)
 
+
     useEffect(() => {
+        loadDeliveryAddresses().then(setDeliveryAddressOptions);
+
         form.setFieldsValue({
             deliveryDate: 1,
             currentDate: dayjs(),
@@ -47,7 +56,7 @@ export const LogisticFormRegular = () => {
             <DriverTransportFormRegular/>
             <CargoInfoFormRegular/>
             <DateAndWaybillFormRegular/>
-            <LocationDetailsFormRegular/>
+            <LocationDetailsFormRegular deliveryAddressOptions={deliveryAddressOptions}/>
             <SignatureAndDownloadFormRegular/>
         </Form>
     )

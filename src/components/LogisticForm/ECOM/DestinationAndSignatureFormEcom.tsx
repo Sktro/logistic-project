@@ -1,8 +1,12 @@
 import style from "../LogisticForm.module.css";
 import {Form, Select} from "antd";
-import {deliveryAddressOptions, specialistOptions} from "../../../options";
+import {specialistOptions} from "../../../options";
 
-export const DestinationAndSignatureFormEcom = () => {
+interface DestinationAndSignatureFormEcomProps {
+    deliveryAddressOptionsFromEcom: { label: string, value: string }[]
+}
+
+export const DestinationAndSignatureFormEcom = ({deliveryAddressOptionsFromEcom}: DestinationAndSignatureFormEcomProps) => {
     return (
         <div className={style.addressContainer}>
             <Form.Item className={style.itemForm}
@@ -10,14 +14,14 @@ export const DestinationAndSignatureFormEcom = () => {
                        label="Доставка">
                 <Select size={"small"}
                         style={{width: '130px'}}
-                        filterOption={(input, deliveryAddressOptions) =>
-                            (deliveryAddressOptions?.label ?? '')
+                        filterOption={(input, deliveryAddressOptionsFromEcom) =>
+                            (deliveryAddressOptionsFromEcom?.label ?? '')
                                 .toString()
                                 .toLowerCase()
                                 .includes(input.toLowerCase())
                         }
                         showSearch
-                        options={deliveryAddressOptions.sort((a, b) => a.label.localeCompare(b.label))}/>
+                        options={deliveryAddressOptionsFromEcom.sort((a, b) => a.label.localeCompare(b.label))}/>
             </Form.Item>
             <Form.Item className={style.itemForm}
                        name="specialist"
