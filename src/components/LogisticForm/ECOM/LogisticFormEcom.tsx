@@ -4,7 +4,7 @@ import {
     legalCompanyOptions, shopsOptionsECOM1, shopsOptionsECOM2, specialistOptions,
     transportCompanyOptions
 } from "../../../options";
-import {useEffect, useState} from "react";
+import {useEffect, useLayoutEffect, useState} from "react";
 import dayjs from "dayjs";
 import {RouteOneShopsFormEcom} from "./RouteOneShopsFormEcom";
 import {RouteTwoShopsFormEcom} from "./RouteTwoShopsFormEcom";
@@ -25,7 +25,10 @@ interface LogisticFormECOMProps {
     setDeliveryAddressOptionsFromEcom: (options: { label: string, value: string }[]) => void;
 }
 
-export const LogisticFormECOM = ({setDeliveryAddressOptionsFromEcom, deliveryAddressOptionsFromEcom}: LogisticFormECOMProps) => {
+export const LogisticFormECOM = ({
+                                     setDeliveryAddressOptionsFromEcom,
+                                     deliveryAddressOptionsFromEcom
+                                 }: LogisticFormECOMProps) => {
     const [form] = Form.useForm()
     const [segmented, setSegmented] = useState<SegmentedType>('ЕКОМ №1')
     const [submitType, setSubmitType] = useState<submitActionsType>('invoice')
@@ -63,10 +66,34 @@ export const LogisticFormECOM = ({setDeliveryAddressOptionsFromEcom, deliveryAdd
             transport: '',
             truckNumber: '',
             waybillNumber: '',
-            deliveryAddress: segmented === 'ЕКОМ №1' ? deliveryAddressOptionsFromEcom.find(s => s.label === "Химки")?.value : deliveryAddressOptionsFromEcom.find(s => s.label === "Рига")?.value,
             specialist: undefined,
         })
-    }, [form, segmented])
+    }, [form])
+
+    useEffect(() => {
+        let cancelled = false;
+        (async () => {
+            if (!deliveryAddressOptionsFromEcom?.length) {
+                const opts = await loadDeliveryAddresses();
+                if (cancelled) return;
+                setDeliveryAddressOptionsFromEcom(opts);
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [setDeliveryAddressOptionsFromEcom, deliveryAddressOptionsFromEcom?.length]);
+
+    useLayoutEffect(() => {
+        if (!deliveryAddressOptionsFromEcom?.length) return;
+
+        const wantedLabel = segmented === 'ЕКОМ №1' ? 'Химки' : 'Рига';
+        const byLabel =
+            deliveryAddressOptionsFromEcom.find(o => o.label === wantedLabel)?.value
+            ?? deliveryAddressOptionsFromEcom[0]?.value;
+
+        form.setFieldsValue({deliveryAddress: byLabel});
+    }, [deliveryAddressOptionsFromEcom, segmented, form]);
 
     const handleFinish = async (values: ValuesConsignmentECOM) => {
         const specialistLabel = specialistOptions.find(opt => opt.value === specialistValue)?.label ?? ""
@@ -92,6 +119,7 @@ export const LogisticFormECOM = ({setDeliveryAddressOptionsFromEcom, deliveryAdd
         <>
             <Segmented<SegmentedType>
                 options={['ЕКОМ №1', 'ЕКОМ №2']}
+                value={segmented}
                 style={{marginBottom: '10px'}}
                 onChange={handleChangeSegmented}
             />
