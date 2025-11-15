@@ -23,6 +23,7 @@ export interface ValuesConsignmentRegular {
     specialist: string // Подпись
     ownershipType: string // Тип владения
     driverFullName: string // ФИО водителя
+    cargoDriverData: string // ИНФО перевозчика
 }
 
 export interface ValuesConsignmentECOM {
@@ -41,15 +42,11 @@ export interface ValuesConsignmentECOM {
     truckSealNumber: string // № пломбы
     specialist: string // Подпись
     driverFullName: string // ФИО водителя
+    cargoDriverData: string // Данные перевозчика
 
     // направления e-com #1
-    smolenka: number // Смоленский пассаж-2
-    okeaniya: number // Океания
-    kapitoliy: number // Капитолий Вернадского
+    smolenka: number // Смоленский пассаж
     modniy: number // Модный сезон
-    aviapark: number // Авиапарк
-    evropolis: number // Европолис
-    megaHimki: number // Мега Химки
 
     // направления e-com #2
     belayaDacha: number // Мега Белая Дача
@@ -59,4 +56,12 @@ export interface ValuesConsignmentECOM {
     vegasKuncevo: number // Вегас Кунцево
     vegasMyakinino: number // Вегас Мякинино
     rigaMoll: number // Рига Молл
+
+    // направления e-com #3
+    metropolis: number // Метрополис
+    okeaniya: number // Океания
+    kapitoliy: number // Капитолий Вернадского
+    aviapark: number // Авиапарк
+    evropolis: number // Европолис
+    megaHimki: number // Мега Химки
 }

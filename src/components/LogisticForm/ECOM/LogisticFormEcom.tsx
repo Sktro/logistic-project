@@ -1,7 +1,11 @@
 import {Form, Segmented} from "antd";
 import style from "../LogisticForm.module.css";
 import {
-    legalCompanyOptions, shopsOptionsECOM1, shopsOptionsECOM2, specialistOptions,
+    legalCompanyOptions,
+    shopsOptionsECOM1,
+    shopsOptionsECOM2,
+    shopsOptionsECOM3,
+    specialistOptions,
     transportCompanyOptions
 } from "../../../options";
 import {useEffect, useLayoutEffect, useState} from "react";
@@ -17,8 +21,9 @@ import {DateAndWaybillFormEcom} from "./DateAndWaybillFormEcom";
 import {DestinationAndSignatureFormEcom} from "./DestinationAndSignatureFormEcom";
 import {DocumentDownloadPanel} from "./DocumentDownloadPanel";
 import {loadDeliveryAddresses} from "../../../api/deliveryAddresses.ts";
+import {RouteThreeShopsFormEcom} from "./RouteThreeShopsFormEcom.tsx";
 
-type SegmentedType = 'ЕКОМ №1' | 'ЕКОМ №2'
+type SegmentedType = 'ЕКОМ №1' | 'ЕКОМ №2' | 'ЕКОМ №3'
 
 interface LogisticFormECOMProps {
     deliveryAddressOptionsFromEcom: { label: string, value: string }[]
@@ -46,6 +51,7 @@ export const LogisticFormECOM = ({
             currentDate: dayjs(),
             deliveryDate: 1,
             truckSealNumber: '',
+            cargoDriverData: '',
             smolenka: 0,
             okeaniya: 0,
             kapitoliy: 0,
@@ -59,6 +65,7 @@ export const LogisticFormECOM = ({
             tepliyStan: 0,
             vegasKuncevo: 0,
             vegasMyakinino: 0,
+            metropolis: 0,
             rigaMoll: 0,
             driverFullName: '',
             driverPhoneNumber: '',
@@ -87,7 +94,7 @@ export const LogisticFormECOM = ({
     useLayoutEffect(() => {
         if (!deliveryAddressOptionsFromEcom?.length) return;
 
-        const wantedLabel = segmented === 'ЕКОМ №1' ? 'Химки' : 'Рига';
+        const wantedLabel = segmented === 'ЕКОМ №1' ? 'Модный' : segmented === 'ЕКОМ №2' ? 'Рига' : 'Химки';
         const byLabel =
             deliveryAddressOptionsFromEcom.find(o => o.label === wantedLabel)?.value
             ?? deliveryAddressOptionsFromEcom[0]?.value;
@@ -108,6 +115,7 @@ export const LogisticFormECOM = ({
             specialistLabel,
             shopsOptionsECOM1,
             shopsOptionsECOM2,
+            shopsOptionsECOM3,
         })
     }
 
@@ -118,7 +126,7 @@ export const LogisticFormECOM = ({
     return (
         <>
             <Segmented<SegmentedType>
-                options={['ЕКОМ №1', 'ЕКОМ №2']}
+                options={['ЕКОМ №1', 'ЕКОМ №2', 'ЕКОМ №3']}
                 value={segmented}
                 style={{marginBottom: '10px'}}
                 onChange={handleChangeSegmented}
@@ -131,7 +139,9 @@ export const LogisticFormECOM = ({
                 <CargoInfoFormEcom segmented={segmented}/>
                 <DateAndWaybillFormEcom/>
                 <DestinationAndSignatureFormEcom deliveryAddressOptionsFromEcom={deliveryAddressOptionsFromEcom}/>
-                {segmented === 'ЕКОМ №1' ? <RouteOneShopsFormEcom/> : <RouteTwoShopsFormEcom/>}
+                {segmented === 'ЕКОМ №1' ? <RouteOneShopsFormEcom/>
+                    : segmented === 'ЕКОМ №2' ? <RouteTwoShopsFormEcom/>
+                        : <RouteThreeShopsFormEcom/>}
                 <DocumentDownloadPanel setSubmitType={setSubmitType}/>
             </Form>
         </>

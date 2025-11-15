@@ -21,12 +21,12 @@ export async function generateAndSaveExcelRegular(
     const deliveryDateCalc = values.currentDate.add(deliveryDateOffset, 'day').format('DD.MM.YYYY')
 
     const cellMap: Record<string, string> = {
-        B42: values.transportCompany,
+        B12: values.transportCompany,
         AD42: `${values.driverFullName}, ${values.driverData}`,
         D8: values.currentDate.format('DD.MM.YYYY'),
         R8: `${values.currentDate.format('DD.MM.YYYY')}-${values.waybillNumber}`,
         B37: `Дата и время доставки - ${deliveryDateCalc}`,
-        B12: values.companyLegalAddress,
+        AD12: values.companyLegalAddress,
         B19: values.deliveryAddress,
         B22: String(values.cargoDescriptionsFirst),
         B23: String(values.cargoDescriptionsSecond),
@@ -39,6 +39,7 @@ export async function generateAndSaveExcelRegular(
         B68: values.specialist,
         AS48: String(values.ownershipType),
         AB68: values.driverFullName,
+        B42: values.cargoDriverData,
     }
 
     for (const [addr, text] of Object.entries(cellMap)) {
@@ -56,9 +57,9 @@ export async function generateAndSaveExcelRegular(
 
     sheet.getCell('AB76').value = {formula: 'B37'}
 
-    sheet.getCell('B17').value = {formula: 'B12'}
-    sheet.getCell('B54').value = {formula: 'B12'}
-    sheet.getCell('B56').value = {formula: 'B12'}
+    sheet.getCell('B17').value = {formula: 'AD12'}
+    sheet.getCell('B54').value = {formula: 'AD12'}
+    sheet.getCell('B56').value = {formula: 'AD12'}
 
     sheet.getCell('B64').value = {
         formula: 'IF(AND(AC22<>"", AC23<>""), AC22 & ", " & AC23, AC22 & AC23)'

@@ -36,6 +36,12 @@ export const DriverTransportFormRegular = () => {
                        rules={[{required: true, message: 'Введите данные водителя'}]}>
                 <TextArea size={"small"} className={style.textAria}/>
             </Form.Item>
+            <Form.Item className={style.itemForm}
+                       name="cargoDriverData"
+                       label="Данные перевозчика"
+                       rules={[{required: true, message: 'Введите данные перевозчика'}]}>
+                <TextArea size={"small"} />
+            </Form.Item>
             <div className={style.infoContainer}>
                 <div className={style.carContainer}>
                     <Form.Item className={style.itemForm}

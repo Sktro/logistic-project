@@ -24,7 +24,7 @@ export const CargoInfoFormEcom = ({segmented}: CargoInfoFormEcomProps) => {
                          rules={[{required: true}]}>
                   <InputNumber min={0}
                                size={"small"}
-                               disabled={segmented === 'ЕКОМ №2'}
+                               disabled={segmented === 'ЕКОМ №2' || segmented === 'ЕКОМ №1'}
                                style={{width: '150px'}}
                                addonAfter={'пустые б/б'}/>
               </Form.Item>

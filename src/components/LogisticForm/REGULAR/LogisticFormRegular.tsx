@@ -39,6 +39,7 @@ export const LogisticFormRegular = ({setDeliveryAddressOptions, deliveryAddressO
             truckSealNumber: '',
             cargoDescriptionsFirst: '',
             cargoDescriptionsSecond: '',
+            cargoDriverData: '',
         })
     }, [form])
 
