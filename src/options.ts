@@ -141,6 +141,10 @@ export const shopsOptionsECOM1 = [
         shop: '"Модный сезон" (291), г. Москва, Охотный ряд, д. 2,  тел. 8-495-252-10-14, доб. 3323, 3384',
         deliveryTime: '10-25'
     },
+    {
+        shop: '"Капитолий Вернадского" АО "Стокманн" 119311, г. Москва, пр. Вернадского, 6, тел. 8-495-252-10-14, доб. 4411',
+        deliveryTime: '09-30'
+    },
 ]
 
 export const shopsOptionsECOM2 = [
@@ -208,6 +212,7 @@ export const shopsOptionsECOM3 = [
 export const firstRouteECOM = [
     {name: 'smolenka', label: 'Смоленский пассаж'},
     {name: 'modniy', label: 'Модный сезон'},
+    {name: 'kapitoliy', label: 'Капитолий Вернадского'},
 ]
 
 export const secondRouteECOM = [

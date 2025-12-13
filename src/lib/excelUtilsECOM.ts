@@ -118,7 +118,7 @@ export async function generateAndSaveExcelECOM({
             cellMap = {
                 ...baseCellMap,
                 A2: `МАРШРУТНЫЙ ЛИСТ № 1`,
-                A15: `Итого: ${cargoDescriptions}`,
+                A16: `Итого: ${cargoDescriptions}`,
                 B12: '18-00',
 
                 A13: shopsOptionsECOM1[0].shop,
@@ -128,6 +128,10 @@ export async function generateAndSaveExcelECOM({
                 A14: shopsOptionsECOM1[1].shop,
                 B14: shopsOptionsECOM1[1].deliveryTime,
                 E14: `8-291 - ${values.modniy} кор`,
+
+                A15: shopsOptionsECOM1[2].shop,
+                B15: shopsOptionsECOM1[2].deliveryTime,
+                E15: `8-291 - ${values.modniy} кор`,
             };
         } else if (segmented === 'ЕКОМ №2') {
             cellMap = {
