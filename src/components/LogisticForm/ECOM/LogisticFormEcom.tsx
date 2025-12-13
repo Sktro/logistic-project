@@ -94,7 +94,7 @@ export const LogisticFormECOM = ({
     useLayoutEffect(() => {
         if (!deliveryAddressOptionsFromEcom?.length) return;
 
-        const wantedLabel = segmented === 'ЕКОМ №1' ? 'Модный' : segmented === 'ЕКОМ №2' ? 'Рига' : 'Химки';
+        const wantedLabel = segmented === 'ЕКОМ №1' ? 'Модный ТЦ' : segmented === 'ЕКОМ №2' ? 'Рига' : 'Химки';
         const byLabel =
             deliveryAddressOptionsFromEcom.find(o => o.label === wantedLabel)?.value
             ?? deliveryAddressOptionsFromEcom[0]?.value;

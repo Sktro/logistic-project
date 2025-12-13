@@ -7,8 +7,7 @@ export const DateAndWaybillFormEcom = () => {
           <Form.Item className={style.itemForm}
                      name="currentDate"
                      label="Дата">
-              <DatePicker size={"small"}
-                          disabled/>
+              <DatePicker size={"small"}/>
           </Form.Item>
           <Form.Item className={style.itemForm}
                      name="deliveryDate"
