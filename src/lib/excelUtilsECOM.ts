@@ -131,7 +131,7 @@ export async function generateAndSaveExcelECOM({
 
                 A15: shopsOptionsECOM1[2].shop,
                 B15: shopsOptionsECOM1[2].deliveryTime,
-                E15: `8-291 - ${values.modniy} кор`,
+                E15: `8-279 - ${values.modniy} кор`,
             };
         } else if (segmented === 'ЕКОМ №2') {
             cellMap = {
