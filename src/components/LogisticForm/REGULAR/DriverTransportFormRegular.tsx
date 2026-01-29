@@ -1,13 +1,25 @@
-import {type CheckboxChangeEvent, Form, Input, Select} from "antd";
+import {Button, type CheckboxChangeEvent, Form, Input, Select} from "antd";
 import style from "../LogisticForm.module.css";
 import TextArea from "antd/es/input/TextArea";
 import {transportCompanyOptions} from "../../../options";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import {useState} from "react";
+import type {FormInstance} from "antd/es/form";
+import {SignatureOutlined} from '@ant-design/icons';
 
-export const DriverTransportFormRegular = () => {
-    const [form] = Form.useForm()
+type Props = {
+    form: FormInstance;
+};
+
+export const DriverTransportFormRegular = ({form}: Props) => {
     const [required, setRequired] = useState(true)
+
+    const fillCargoDriverData = () => {
+        console.log("clicked");
+        form.setFieldsValue({
+            cargoDriverData: `ООО «Логистика», 121471, г. Москва, ул. Рябиновая, дом 44, офис 402`
+        });
+    };
 
     const handleCheckboxChange = (e: CheckboxChangeEvent) => {
         const isChecked = e.target.checked
@@ -36,12 +48,20 @@ export const DriverTransportFormRegular = () => {
                        rules={[{required: true, message: 'Введите данные водителя'}]}>
                 <TextArea size={"small"} className={style.textAria}/>
             </Form.Item>
-            <Form.Item className={style.itemForm}
-                       name="cargoDriverData"
-                       label="Данные перевозчика"
-                       rules={[{required: true, message: 'Введите данные перевозчика'}]}>
-                <TextArea size={"small"} />
-            </Form.Item>
+            <div className={style.transportBox}>
+                <Form.Item className={style.itemForm}
+                           name="cargoDriverData"
+                           label="Данные перевозчика"
+                           rules={[{required: true, message: 'Введите данные перевозчика'}]}>
+                    <TextArea size={"small"}/>
+                </Form.Item>
+
+                <Button onClick={fillCargoDriverData}
+                        style={{position: 'absolute', top: -7, right: -28}}
+                        type={"link"}
+                        icon={<SignatureOutlined/>}/>
+            </div>
+
             <div className={style.infoContainer}>
                 <div className={style.carContainer}>
                     <Form.Item className={style.itemForm}

@@ -11,6 +11,10 @@
     min-width: 400px;
 }
 
+.transportBox {
+    position: relative;
+}
+
 .textAria {
     min-height: 90px !important;
 }

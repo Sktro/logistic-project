@@ -54,7 +54,7 @@ export const LogisticFormRegular = ({setDeliveryAddressOptions, deliveryAddressO
               onFinish={handleFinish}
               initialValues={{deliveryDate: 1}}
               className={style.formContainer}>
-            <DriverTransportFormRegular/>
+            <DriverTransportFormRegular form={form}/>
             <CargoInfoFormRegular/>
             <DateAndWaybillFormRegular/>
             <LocationDetailsFormRegular deliveryAddressOptions={deliveryAddressOptions}/>

@@ -1,9 +1,23 @@
 import style from "../LogisticForm.module.css";
-import {Form, Input, Select} from "antd";
+import {Button, Form, Input, Select} from "antd";
 import {legalCompanyOptions, transportCompanyOptions} from "../../../options";
 import TextArea from "antd/es/input/TextArea";
+import type { FormInstance } from "antd/es/form";
+import {SignatureOutlined} from "@ant-design/icons";
 
-export const DriverTransportFormEcom = () => {
+type Props = {
+    form: FormInstance;
+};
+
+export const DriverTransportFormEcom = ({ form }: Props) => {
+
+    const fillCargoDriverData = () => {
+        console.log("clicked");
+        form.setFieldsValue({
+            cargoDriverData: `ООО «Логистика», 121471, г. Москва, ул. Рябиновая, дом 44, офис 402`
+        });
+    };
+
     return (
         <>
             <div className={style.driverContainer}>
@@ -37,12 +51,20 @@ export const DriverTransportFormEcom = () => {
                        rules={[{required: true, message: 'Введите данные водителя'}]}>
                 <TextArea size={"small"} className={style.textAria}/>
             </Form.Item>
-            <Form.Item className={style.itemForm}
-                       name="cargoDriverData"
-                       label="Данные перевозчика"
-                       rules={[{required: true, message: 'Введите данные перевозчика'}]}>
-                <TextArea size={"small"}/>
-            </Form.Item>
+            <div className={style.transportBox}>
+                <Form.Item className={style.itemForm}
+                           name="cargoDriverData"
+                           label="Данные перевозчика"
+                           rules={[{required: true, message: 'Введите данные перевозчика'}]}>
+                    <TextArea size={"small"}/>
+                </Form.Item>
+
+                <Button onClick={fillCargoDriverData}
+                        style={{position: 'absolute', top: -7, right: -28}}
+                        type={"link"}
+                        icon={<SignatureOutlined/>}/>
+            </div>
+
             <div className={style.infoContainer}>
                 <div className={style.carContainer}>
                     <Form.Item className={style.itemForm}

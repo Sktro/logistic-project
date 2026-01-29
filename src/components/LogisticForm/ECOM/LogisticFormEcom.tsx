@@ -135,7 +135,7 @@ export const LogisticFormECOM = ({
                   onFinish={handleFinish}
                   initialValues={{deliveryDate: 1}}
                   className={style.formContainer}>
-                <DriverTransportFormEcom/>
+                <DriverTransportFormEcom form={form} />
                 <CargoInfoFormEcom segmented={segmented}/>
                 <DateAndWaybillFormEcom/>
                 <DestinationAndSignatureFormEcom deliveryAddressOptionsFromEcom={deliveryAddressOptionsFromEcom}/>
