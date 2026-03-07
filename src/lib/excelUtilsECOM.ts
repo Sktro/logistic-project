@@ -87,7 +87,7 @@ export async function generateAndSaveExcelECOM({
             `${segmented} ${deliveryAddressLabel} ${transportCompanyLabel} ${values.driverFullName} ${values.truckNumber}.xlsx`
         );
     } else {
-        const filePath = segmented === 'ЕКОМ №1' ? 'rl1.xlsx' : 'rl.xlsx';
+        const filePath = segmented === 'ЕКОМ №1' ? 'rl1.xlsx' : segmented === 'ЕКОМ №2' ? 'rl2.xlsx' : 'rl3.xlsx'
 
         // Логика для маршрутного листа
         const arrayBuffer = await fetch(filePath).then(r => {
@@ -118,7 +118,7 @@ export async function generateAndSaveExcelECOM({
             cellMap = {
                 ...baseCellMap,
                 A2: `МАРШРУТНЫЙ ЛИСТ № 1`,
-                A16: `Итого: ${cargoDescriptions}`,
+                A15: `Итого: ${cargoDescriptions}`,
                 B12: '18-00',
 
                 A13: shopsOptionsECOM1[0].shop,
@@ -128,10 +128,6 @@ export async function generateAndSaveExcelECOM({
                 A14: shopsOptionsECOM1[1].shop,
                 B14: shopsOptionsECOM1[1].deliveryTime,
                 E14: `8-291 - ${values.modniy} кор`,
-
-                A15: shopsOptionsECOM1[2].shop,
-                B15: shopsOptionsECOM1[2].deliveryTime,
-                E15: `8-279 - ${values.kapitoliy} кор`,
             };
         } else if (segmented === 'ЕКОМ №2') {
             cellMap = {
@@ -172,39 +168,34 @@ export async function generateAndSaveExcelECOM({
             cellMap = {
                 ...baseCellMap,
                 A2: `МАРШРУТНЫЙ ЛИСТ № 3`,
-                A20: `Итого: ${cargoDescriptions}`,
+                A19: `Итого: ${cargoDescriptions}`,
                 B12: '19-00',
 
                 A13: shopsOptionsECOM3[0].shop,
                 B13: shopsOptionsECOM3[0].deliveryTime,
-                E13: `8-265 - ${values.smolenka} кор`,
+                E13: `8-265 - ${values.metropolis} кор`,
 
                 A14: shopsOptionsECOM3[1].shop,
                 B14: shopsOptionsECOM3[1].deliveryTime,
-                E14: `8-282 - ${values.metropolis} кор`,
+                E14: `8-282 - ${values.okeaniya} кор`,
 
                 A15: shopsOptionsECOM3[2].shop,
                 B15: shopsOptionsECOM3[2].deliveryTime,
-                E15: `8-267 - ${values.okeaniya} кор`,
+                E15: `8-267 - ${values.kapitoliy} кор`,
 
                 A16: shopsOptionsECOM3[3].shop,
                 B16: shopsOptionsECOM3[3].deliveryTime,
-                E16: `8-279 - ${values.kapitoliy} кор`,
+                E16: `8-279 - ${values.aviapark} кор`,
 
                 A17: shopsOptionsECOM3[4].shop,
                 B17: shopsOptionsECOM3[4].deliveryTime,
-                E17: `8-260 - ${values.aviapark} кор`,
+                E17: `8-260 - ${values.evropolis} кор`,
 
                 A18: shopsOptionsECOM3[5].shop,
                 B18: shopsOptionsECOM3[5].deliveryTime,
-                E18: `8-255 - ${values.evropolis} кор`,
-
-                A19: shopsOptionsECOM3[6].shop,
-                B19: shopsOptionsECOM3[6].deliveryTime,
-                E19: `8-252 - ${values.megaHimki} кор`,
-            };
+                E18: `8-255 - ${values.megaHimki} кор`,
+            }
         }
-
         for (const [addr, text] of Object.entries(cellMap)) {
             const cell = sheet.getCell(addr);
             cell.value = text;

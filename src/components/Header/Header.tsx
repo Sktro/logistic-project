@@ -8,7 +8,7 @@ interface HeaderProps {
 export const Header = ({setSettings}: HeaderProps) => {
     return (
         <header className={style.header}>
-            <h2>СТОКМАНН - ЛОГИСТИК<span onClick={()=> setSettings(true)}>А</span></h2>
+            <h2>СТОКМАНН - ЛОГИСТИК<span onClick={() => setSettings(true)}>А</span></h2>
         </header>
     )
 }
