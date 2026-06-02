@@ -50,7 +50,6 @@ export async function generateAndSaveExcelECOM({
             B19: values.deliveryAddress,
             B23: cargoDescriptions,
             B37: `Дата и время доставки - ${deliveryDateCalc}`,
-            B12: values.transportCompany,
             AD42: `${values.driverFullName}, ${values.driverData}, номер телефона: ${values.driverPhoneNumber}`,
             B45: String(values.transport),
             AD45: String(values.truckNumber).toUpperCase(),
@@ -173,27 +172,27 @@ export async function generateAndSaveExcelECOM({
 
                 A13: shopsOptionsECOM3[0].shop,
                 B13: shopsOptionsECOM3[0].deliveryTime,
-                E13: `8-265 - ${values.metropolis} кор`,
+                E13: `8-282 - ${values.metropolis} кор`,
 
                 A14: shopsOptionsECOM3[1].shop,
                 B14: shopsOptionsECOM3[1].deliveryTime,
-                E14: `8-282 - ${values.okeaniya} кор`,
+                E14: `8-267 - ${values.okeaniya} кор`,
 
                 A15: shopsOptionsECOM3[2].shop,
                 B15: shopsOptionsECOM3[2].deliveryTime,
-                E15: `8-267 - ${values.kapitoliy} кор`,
+                E15: `8-279 - ${values.kapitoliy} кор`,
 
                 A16: shopsOptionsECOM3[3].shop,
                 B16: shopsOptionsECOM3[3].deliveryTime,
-                E16: `8-279 - ${values.aviapark} кор`,
+                E16: `8-260 - ${values.aviapark} кор`,
 
                 A17: shopsOptionsECOM3[4].shop,
                 B17: shopsOptionsECOM3[4].deliveryTime,
-                E17: `8-260 - ${values.evropolis} кор`,
+                E17: `8-255 - ${values.evropolis} кор`,
 
                 A18: shopsOptionsECOM3[5].shop,
                 B18: shopsOptionsECOM3[5].deliveryTime,
-                E18: `8-255 - ${values.megaHimki} кор`,
+                E18: `8-252 - ${values.megaHimki} кор`,
             }
         }
         for (const [addr, text] of Object.entries(cellMap)) {
