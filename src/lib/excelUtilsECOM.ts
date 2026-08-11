@@ -132,7 +132,7 @@ export async function generateAndSaveExcelECOM({
             cellMap = {
                 ...baseCellMap,
                 A2: `МАРШРУТНЫЙ ЛИСТ № 2`,
-                A20: `Итого: ${cargoDescriptions}`,
+                A19: `Итого: ${cargoDescriptions}`,
                 B12: '18-30',
 
                 A13: shopsOptionsECOM2[0].shop,
@@ -153,15 +153,11 @@ export async function generateAndSaveExcelECOM({
 
                 A17: shopsOptionsECOM2[4].shop,
                 B17: shopsOptionsECOM2[4].deliveryTime,
-                E17: `8-272 - ${values.vegasKuncevo} кор`,
+                E17: `8-273 - ${values.vegasMyakinino} кор`,
 
                 A18: shopsOptionsECOM2[5].shop,
                 B18: shopsOptionsECOM2[5].deliveryTime,
-                E18: `8-273 - ${values.vegasMyakinino} кор`,
-
-                A19: shopsOptionsECOM2[6].shop,
-                B19: shopsOptionsECOM2[6].deliveryTime,
-                E19: `8-264 - ${values.rigaMoll} кор`,
+                E18: `8-264 - ${values.rigaMoll} кор`,
             }
         } else {
             cellMap = {
@@ -184,11 +180,11 @@ export async function generateAndSaveExcelECOM({
 
                 A16: shopsOptionsECOM3[3].shop,
                 B16: shopsOptionsECOM3[3].deliveryTime,
-                E16: `8-260 - ${values.aviapark} кор`,
+                E16: `8-255 - ${values.evropolis} кор`,
 
                 A17: shopsOptionsECOM3[4].shop,
                 B17: shopsOptionsECOM3[4].deliveryTime,
-                E17: `8-255 - ${values.evropolis} кор`,
+                E17: `8-260 - ${values.aviapark} кор`,
 
                 A18: shopsOptionsECOM3[5].shop,
                 B18: shopsOptionsECOM3[5].deliveryTime,

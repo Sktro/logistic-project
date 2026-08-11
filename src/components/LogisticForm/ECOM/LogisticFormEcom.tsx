@@ -44,7 +44,7 @@ export const LogisticFormECOM = ({
     useEffect(() => {
         loadDeliveryAddresses().then(setDeliveryAddressOptionsFromEcom);
         form.setFieldsValue({
-            transportCompany: transportCompanyOptions[2].value,
+            transportCompany: transportCompanyOptions[3].value,
             companyLegalAddress: legalCompanyOptions[0].value,
             cargoFirst: 0,
             cargoSecond: 0,

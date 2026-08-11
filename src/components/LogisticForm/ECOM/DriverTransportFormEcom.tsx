@@ -3,7 +3,6 @@ import {Button, Form, Input, Select} from "antd";
 import {legalCompanyOptions, transportCompanyOptions} from "../../../options";
 import TextArea from "antd/es/input/TextArea";
 import type { FormInstance } from "antd/es/form";
-import {SignatureOutlined} from "@ant-design/icons";
 
 type Props = {
     form: FormInstance;
@@ -11,11 +10,24 @@ type Props = {
 
 export const DriverTransportFormEcom = ({ form }: Props) => {
 
-    const fillCargoDriverData = () => {
-        console.log("clicked");
+    const fillCargoDriverData = (text: string) => {
         form.setFieldsValue({
-            cargoDriverData: `ООО «Логистика», 121471, г. Москва, ул. Рябиновая, дом 44, офис 402`
+            cargoDriverData: ''
         });
+
+        setTimeout(() => {
+            form.setFieldsValue({
+                cargoDriverData: text
+            });
+        }, 0);
+    };
+
+    const fillDataLogistika = () => {
+        fillCargoDriverData(`ООО «Логистика», 121471, г. Москва, ул. Рябиновая, дом 44, офис 402`);
+    };
+
+    const fillDataVera = () => {
+        fillCargoDriverData(`ООО «Вера», 170028, г. Тверь, ул. Коминтерна, дом 46, оф. 3, ИНН 6950092949`);
     };
 
     return (
@@ -59,10 +71,12 @@ export const DriverTransportFormEcom = ({ form }: Props) => {
                     <TextArea size={"small"}/>
                 </Form.Item>
 
-                <Button onClick={fillCargoDriverData}
-                        style={{position: 'absolute', top: -7, right: -28}}
-                        type={"link"}
-                        icon={<SignatureOutlined/>}/>
+                <Button style={{position: 'absolute', top: -3, right: -28}}
+                        size={"small"}
+                        onClick={fillDataLogistika}>Л</Button>
+                <Button style={{position: 'absolute', top: 23, right: -27}}
+                        size={"small"}
+                        onClick={fillDataVera}>В</Button>
             </div>
 
             <div className={style.infoContainer}>
@@ -85,7 +99,6 @@ export const DriverTransportFormEcom = ({ form }: Props) => {
                                name="transportCompany"
                                label="ТК">
                         <Select size={"small"}
-                                disabled
                                 options={transportCompanyOptions}/>
                     </Form.Item>
                     <Form.Item className={style.itemForm}

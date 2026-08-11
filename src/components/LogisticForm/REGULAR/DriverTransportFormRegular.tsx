@@ -5,7 +5,6 @@ import {transportCompanyOptions} from "../../../options";
 import Checkbox from "antd/es/checkbox/Checkbox";
 import {useState} from "react";
 import type {FormInstance} from "antd/es/form";
-import {SignatureOutlined} from '@ant-design/icons';
 
 type Props = {
     form: FormInstance;
@@ -14,11 +13,28 @@ type Props = {
 export const DriverTransportFormRegular = ({form}: Props) => {
     const [required, setRequired] = useState(true)
 
-    const fillCargoDriverData = () => {
-        console.log("clicked");
+    const fillCargoDriverData = (text: string) => {
         form.setFieldsValue({
-            cargoDriverData: `ООО «Логистика», 121471, г. Москва, ул. Рябиновая, дом 44, офис 402`
+            cargoDriverData: ''
         });
+
+        setTimeout(() => {
+            form.setFieldsValue({
+                cargoDriverData: text
+            });
+        }, 0);
+    };
+
+    const fillDataLogistika = () => {
+        fillCargoDriverData(`ООО «Логистика», 121471, г. Москва, ул. Рябиновая, дом 44, офис 402`);
+    };
+
+    const fillDataKolganov = () => {
+        fillCargoDriverData(`ИП Колганов Николай Владимирович, 171413, Тверская обл., Рамешковский р-он, Киверический с/о, с. Киверичи, ул. Кирова 14, ИНН 694900244297`);
+    };
+
+    const fillDataVD = () => {
+        fillCargoDriverData(`ООО "ТК ВД", 121108, Москва г, вн. тер. г. муниципальный округ Фили-Давыдково, ул. Герасима Курина, д8к3, кв5 ИНН 9731099087, ОГРН 1227700565740`);
     };
 
     const handleCheckboxChange = (e: CheckboxChangeEvent) => {
@@ -56,10 +72,15 @@ export const DriverTransportFormRegular = ({form}: Props) => {
                     <TextArea size={"small"}/>
                 </Form.Item>
 
-                <Button onClick={fillCargoDriverData}
-                        style={{position: 'absolute', top: -7, right: -28}}
-                        type={"link"}
-                        icon={<SignatureOutlined/>}/>
+                <Button onClick={fillDataLogistika}
+                        style={{position: 'absolute', top: -3, right: -55}}
+                        size={"small"}>Л</Button>
+                <Button style={{position: 'absolute', top: -3, right: -28}}
+                        size={"small"}
+                        onClick={fillDataKolganov}>K</Button>
+                <Button style={{position: 'absolute', top: 23, right: -46}}
+                        size={"small"}
+                        onClick={fillDataVD}>ВД</Button>
             </div>
 
             <div className={style.infoContainer}>
